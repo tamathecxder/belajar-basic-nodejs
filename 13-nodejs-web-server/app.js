@@ -21,13 +21,25 @@ http
         });
     }
 
-    if ( url === '/about' ) {
-        renderHTML('./about.html', res);
-    } else if ( url === '/contact' ) {
-        renderHTML('./contact.html', res);
-    } else {
-        renderHTML('./index.html', res);
+    switch (url) {
+        case '/about':
+            renderHTML('./about.html', res);
+            break;
+        case '/contact':
+            renderHTML('./contact.html', res);
+            break;
+        default:
+            renderHTML('./index.html', res);
+            break;
     }
+
+    // if ( url === '/about' ) {
+    //     renderHTML('./about.html', res);
+    // } else if ( url === '/contact' ) {
+    //     renderHTML('./contact.html', res);
+    // } else {
+    //     renderHTML('./index.html', res);
+    // }
     
 })
 .listen(port, () => {
