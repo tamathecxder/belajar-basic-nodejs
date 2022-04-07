@@ -1,6 +1,7 @@
 const fs = require('fs');
 const chalk = require('chalk');
 const validator = require('validator');
+
 // membuat folder data
 const dirPath = './data';
 if ( !fs.existsSync(dirPath) ) {
@@ -58,4 +59,34 @@ const listContact = () => {
     });
 }
 
-module.exports = { listContact, saveContact };
+const detailContact = (nama) => {
+    const contacts = loadContact();
+    const contact = contacts.find((contact) => contact.nama.toLowerCase() === nama.toLowerCase());
+
+    if ( !contact ) {
+        console.log(chalk.bgRed.black.bold(`${nama} tidak ditemukan!`));
+        return false;
+    }
+    
+    console.log(chalk.black.bgCyan(`${contact.nama}`));
+    console.log(`${contact.telp} :`);
+    if ( contact.email ) {
+        console.log(`${contact.email} :`);
+    }
+} 
+
+const deleteContact = (nama) => {
+    const contacts = loadContact();
+    const newContacts = contacts.filter((contact) => contact.nama.toLowerCase() !== nama.toLowerCase());
+
+    if ( contacts.length === newContacts.length ) {
+        console.log(chalk.bgRed.black.bold(`${nama} tidak ditemukan!`));
+        return false;
+    }
+
+    fs.writeFileSync('data/contacts.json', JSON.stringify(newContacts));
+
+    console.log(chalk.bgGreen(`Data contact berhasil dihapus!`));
+}   
+
+module.exports = { listContact, detailContact, deleteContact, saveContact };

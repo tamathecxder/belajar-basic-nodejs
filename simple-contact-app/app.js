@@ -36,5 +36,39 @@ yargs.command({
     }
 })
 
+// Command untuk menampilkan detail sebuah contact
+yargs.command({
+    command: 'detail',
+    describe: 'Menampilkan detail dari sebuah contact berdasarkan nama',
+    builder: {
+        nama: {
+            describe: 'Nama lengkap',
+            demandOption: true,
+            type: 'string',
+        }
+    },
+    handler(argv) {
+        contacts.detailContact(argv.nama);
+    }
+})
+
+// Command untuk menghapus sebuah contact
+yargs.command({
+    command: 'delete',
+    describe: 'Menghapus sebuah contact berdasarkan nama',
+    builder: {
+        nama: {
+            describe: 'Nama lengkap',
+            demandOption: true,
+            type: 'string',
+        }
+    },
+    handler(argv) {
+        contacts.deleteContact(argv.nama);
+    }
+})
+
+
+
 
 yargs.parse();
