@@ -1,25 +1,23 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-     <meta name="viewport" content="width=\, initial-scale=1.0">
-     <title>Node Server</title>
- </head>
- <body>
+<h1>Hello World</h1>
+<p>Welcome to node web server...</p>
 
-    <h3>Links</h3>
-    <ul>
-        <li><a href="/">Homepage</a></li>
-        <li><a href="/contact">Contact</a></li>
-        <li><a href="/about">About</a></li>
-    </ul>
+<% const name='Ujang Jumbo' %>
+    <h2>Hello, <%= name %>
+    </h2>
+    <h4>
+        <%= email %>
+    </h4>
 
-    <h1>Hello World</h1>
-    <p>Welcome to node web server...</p>
-
-    <% const name = 'Ujang Jumbo' %>
-    <h2>Hello, <%= name %></h2>
-     
- </body>
- </html>
+    <h4>Daftar pegawai-pegawai</h4>
+    <% if (pegawai.length < 1) { %>
+        <p>Data Pegawai masih kosong...</p>
+        <% } else { %>
+            <% pegawai.forEach(pgw=> { %>
+                <ul>
+                    <li>Nama: <%= pgw.nama %>
+                    </li>
+                    <li>Email: <%= pgw.email %>
+                    </li>
+                </ul>
+                <% }) %>
+            <% } %>

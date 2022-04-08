@@ -1,20 +1,49 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const expressLayouts = require('express-ejs-layouts');
 
 // Menggunakan templating engine EJS
 app.set('view engine', 'ejs');
 
+app.use(expressLayouts);
+
 app.get('/', (req, res) => {
-    res.render('index');
+    const pegawai = [
+        {
+            nama: "Ajun Bagas",
+            email: "ajunbagas@gmail.com"
+        },
+        {
+            nama: "Sarah Apriliani",
+            email: "sarahapr@gmail.com"
+        },
+        {
+            nama: "Gustav Kennedy",
+            email: "gustavken@gmail.com"
+        }
+    ];
+
+    res.render('index', {
+        layout: 'layouts/main-layout',
+        title: "Homepage",
+        email: "ujangs@yandex.com",
+        pegawai: pegawai
+    });
 }); 
 
 app.get('/about', (req, res) => {
-    res.render('about');
+    res.render('about', {
+        layout: 'layouts/main-layout',
+        title: 'About page',
+    });
 })
 
 app.get('/contact', (req, res) => {
-    res.render('contact');
+    res.render('contact', {
+        layout: 'layouts/main-layout',
+        title: "Contact page",
+    });
 })
 
 app.get('/product/:id', (req, res) => {
