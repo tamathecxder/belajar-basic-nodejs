@@ -1,21 +1,15 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+const { loadContact } = require('./utils/contacts');
+const { findContact } = require('./utils/contacts');
 const expressLayouts = require('express-ejs-layouts');
-const morgan = require('morgan');
 
 // Menggunakan templating engine EJS
 app.set('view engine', 'ejs');
 
 // Third-party middleware
 app.use(expressLayouts);
-app.use(morgan('dev'));
-
-// Application-level middleware
-app.use((req, res, next) => {
-    console.log('Time: ' + Date.now());
-    next();
-})
 
 // Built-in middleware
 app.use(express.static('public'));
@@ -52,15 +46,25 @@ app.get('/about', (req, res) => {
 })
 
 app.get('/contact', (req, res) => {
+    const contacts = loadContact();
+
     res.render('contact', {
         layout: 'layouts/main-layout',
         title: "Contact page",
+        contacts: contacts,
     });
 })
 
-app.get('/product/:id', (req, res) => {
-    res.send(`Product ID: ${req.params.id} <br> Category: ${req.query.category}`)
-});
+app.get('/contact/:nama', (req, res) => {
+    const contact = findContact(req.params.nama);
+
+    res.render('detail', {
+        layout: 'layouts/main-layout',
+        error: "Contact dengan nama tersebut tidak tersedia!",
+        title: "Detail contact",
+        contact: contact,
+    });
+})
 
 app.use('/', (req, res) => {
     res.status(404);

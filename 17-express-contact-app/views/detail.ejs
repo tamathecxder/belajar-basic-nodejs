@@ -1,0 +1,21 @@
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Detail Contact</h2>
+            <% if (!contact) { %>
+                <div class="alert alert-danger" role="alert">
+                    <%= error %>  <a href="/contact" class="alert-link">Kembali ke halaman contact...</a>
+                </div>
+            <% } else { %>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title"><%= contact.nama %> </h5>
+                  <h6 class="card-subtitle mb-2 text-muted"><%= contact.telp %> </h6>
+                  <p class="card-text"><%= contact.email %> </p>
+                  <a href="/contact" class="card-link">&laquo; Kembali ke halaman contact</a>
+                </div>
+            </div>
+            <% } %> 
+        </div>
+    </div>
+</div>
