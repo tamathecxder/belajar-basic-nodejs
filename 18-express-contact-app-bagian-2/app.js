@@ -4,11 +4,26 @@ const port = 3000;
 const { loadContact, findContact, addContact, checkDuplicate } = require('./utils/contacts');
 const expressLayouts = require('express-ejs-layouts');
 const { body, check, validationResult } = require('express-validator');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
 app.set('view engine', 'ejs'); // Templating engine EJS
 app.use(expressLayouts); // Third-party middleware
 app.use(express.static('public')); // Built-in middleware
 app.use(express.urlencoded({ extended: true }));
+
+// Konfigurasi flash
+app.use(cookieParser('secret'));
+app.use(
+    session({
+        cookie: { maxAge: 6000 },
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+app.use(flash());
 
 app.get('/', (req, res) => {
     const pegawai = [
@@ -32,7 +47,7 @@ app.get('/', (req, res) => {
         email: "ujangs@yandex.com",
         pegawai: pegawai
     });
-}); 
+});
 
 app.get('/about', (req, res) => {
     res.render('about', {
@@ -60,11 +75,11 @@ app.get('/contact/add', (req, res) => {
 });
 
 // Proses store data contact
-app.post('/contact', 
+app.post('/contact',
     [
         body('nama').custom((value) => {
             const duplicate = checkDuplicate(value);
-            if ( duplicate ) {
+            if (duplicate) {
                 throw new Error('Nama contact sudah tersedia, harap gunakan nama lain!');
             }
 
@@ -76,7 +91,7 @@ app.post('/contact',
     (req, res) => {
         const errors = validationResult(req);
 
-        if ( !errors.isEmpty() ) {
+        if (!errors.isEmpty()) {
             // return res.status(400).json({ errors: errors.array() });
             res.render('add-contact', {
                 layout: 'layouts/main-layout',
@@ -88,7 +103,7 @@ app.post('/contact',
             res.redirect('/contact');
         }
 
-}); 
+    });
 
 // Halaman detail contact
 app.get('/contact/:nama', (req, res) => {
