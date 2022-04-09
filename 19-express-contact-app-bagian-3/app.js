@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const { loadContact, findContact, addContact, checkDuplicate, deleteContact } = require('./utils/contacts');
+const { loadContact, findContact, addContact, checkDuplicate, deleteContact, updateContacts } = require('./utils/contacts');
 const expressLayouts = require('express-ejs-layouts');
 const { body, check, validationResult } = require('express-validator');
 const session = require('express-session');
@@ -157,7 +157,7 @@ app.post('/contact/update',
                 contact: req.body
             });
         } else {
-            updateContact(req.body);
+            updateContacts(req.body);
             // Flash message
             req.flash('msg', 'Data contact berhasil diubah');
             res.redirect('/contact');
