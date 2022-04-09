@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const { loadContact, findContact, addContact, checkDuplicate } = require('./utils/contacts');
+const { loadContact, findContact, addContact, checkDuplicate, deleteContact } = require('./utils/contacts');
 const expressLayouts = require('express-ejs-layouts');
 const { body, check, validationResult } = require('express-validator');
 const session = require('express-session');
@@ -116,9 +116,52 @@ app.get('/contact/delete/:nama', (req, res) => {
         res.status(404);
         res.send('<h1 align="center" style="margin: 8em auto;">404 Not Found</h1>')
     } else {
-        res.send('OK');
+        deleteContact(req.params.nama);
+        req.flash('msg', 'Data contact tersebut berhasil dihapus');
+        res.redirect('/contact');
     }
+});
 
+// Halaman form ubah data contact
+app.get('/contact/edit/:nama', (req, res) => {
+    const contact = findContact(req.params.nama);
+    res.render('edit-contact', {
+        layout: 'layouts/main-layout',
+        title: "Form ubah data contact",
+        contact: contact,
+    });
+});
+
+// Proses ubah data contact
+app.post('/contact/update', 
+    [
+        body('nama').custom((value, { req }) => {
+            const duplicate = checkDuplicate(value);
+            if (value !== req.body.oldNama && duplicate) {
+                throw new Error('Nama contact sudah tersedia');
+            }
+
+            return true;
+        }),
+        check('email', 'Alamat email tidak valid').isEmail(),
+        check('telp', 'Nomor telepon tidak valid').isMobilePhone('id-ID'),
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+
+        if ( !errors.isEmpty() ) {
+            res.render('edit-contact', {
+                layout: 'layouts/main-layout',
+                title: 'Form ubah data contact',
+                errors: errors.array(),
+                contact: req.body
+            });
+        } else {
+            updateContact(req.body);
+            // Flash message
+            req.flash('msg', 'Data contact berhasil diubah');
+            res.redirect('/contact');
+        }
 });
 
 // Halaman detail contact
