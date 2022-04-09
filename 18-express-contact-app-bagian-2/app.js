@@ -1,18 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const { loadContact } = require('./utils/contacts');
-const { findContact } = require('./utils/contacts');
+const { loadContact, findContact, addContact } = require('./utils/contacts');
 const expressLayouts = require('express-ejs-layouts');
+const { body, check, validationResult } = require('express-validator');
 
-// Menggunakan templating engine EJS
-app.set('view engine', 'ejs');
-
-// Third-party middleware
-app.use(expressLayouts);
-
-// Built-in middleware
-app.use(express.static('public'));
+app.set('view engine', 'ejs'); // Templating engine EJS
+app.use(expressLayouts); // Third-party middleware
+app.use(express.static('public')); // Built-in middleware
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     const pegawai = [
@@ -61,7 +57,24 @@ app.get('/contact/add', (req, res) => {
         layout: 'layouts/main-layout',
         title: "Form tambah data contact",
     });
-})
+});
+
+// Proses store data contact
+app.post('/contact', 
+    [
+        check('email', 'Alamat email tidak valid').isEmail(),
+        check('telp', 'Nomor telepon tidak sesuai dengan format baku').isMobilePhone('id-ID'),
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+
+        if ( !errors.isEmpty() ) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        // addContact(req.body);
+        // res.redirect('/contact');
+}); 
 
 // Halaman detail contact
 app.get('/contact/:nama', (req, res) => {

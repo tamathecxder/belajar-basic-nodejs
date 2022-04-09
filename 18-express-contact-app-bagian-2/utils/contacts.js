@@ -28,4 +28,17 @@ const findContact = (nama) => {
     return contact;
 }
 
-module.exports = { loadContact, findContact };
+// Menimpa/menuliskan file contacts.json dengan data bary
+const saveContacts = (contacts) => {
+    fs.writeFileSync('data/contacts.json', JSON.stringify(contacts));
+}
+
+// Menambahkan data contact baru
+const addContact = (contact) => {
+    const contacts = loadContact();
+    contacts.push(contact);
+    saveContacts(contacts);
+}
+
+
+module.exports = { loadContact, findContact, addContact };
