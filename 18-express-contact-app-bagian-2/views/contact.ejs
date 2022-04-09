@@ -7,9 +7,16 @@
                 Tambah data contact
             </a>
 
+            <% if (msg.length !== 0) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <%= msg %> 
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } %>
+
             <table class="table">
                 <thead>
-                    <tr>
+                    <tr class="table-dark">
                         <th scope="col">No</th>
                         <th scope="col">Nama Lengkap</th>
                         <th scope="col">No. Telp</th>
