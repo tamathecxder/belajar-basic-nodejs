@@ -17,16 +17,44 @@ client.connect((err, client) => {
     const db = client.db(dbName);
 
     // menambahkan 1 data ke collection mahasiswa
-    db.collection('mahasiswa').insertOne({
-        nama: 'Maulana',
-        email: 'maulana@gmail.com'
-    }, ((err, result) => {
+    // db.collection('mahasiswa').insertOne({
+    //     nama: 'Maulana',
+    //     email: 'maulana@gmail.com'
+    // }, ((err, result) => {
+    //     if (err) {
+    //         return console.log(err);
+    //     }
+
+    //     console.log(result.ops);
+    // })); 
+
+    // menambahkan lebih dari 1 data ke collection mahasiswa
+    // db.collection('mahasiswa').insertMany([
+    //     {
+    //         nama: 'Erik',
+    //         email: 'erik@gmail.com',
+    //     },
+    //     {
+    //         nama: 'Maulana',
+    //         email: 'maulana@gmail.com'
+    //     }
+    // ], ((err, result) => {
+    //     if (err) {
+    //         return console.log(err);
+    //     }
+
+    //     console.log(result.ops);
+    // }));
+
+
+    // menampilkan semua data yang ada didalam collection mahasiswa
+    db.collection('mahasiswa').find().toArray((err, result) => {
         if (err) {
             return console.log(err);
         }
 
-        console.log(result.ops);
-    })); 
+        console.log(result);
+    });
 });
 
 
