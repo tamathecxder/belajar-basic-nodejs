@@ -1,0 +1,33 @@
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Form tambah data contact</h2>
+
+            <% if (typeof errors != 'undefined' ) { %>
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        <% errors.forEach(error => { %>
+                            <li><%= error.msg %> </li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% } %>
+
+                    <form method="post" action="/contact">
+                        <div class="mb-3">
+                            <label for="nama" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="nama" name="nama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telp" class="form-label">No. Telepon</label>
+                            <input type="number" class="form-control" id="telp" name="telp" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Alamat Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tambah data</button>
+                    </form>
+        </div>
+    </div>
+</div>

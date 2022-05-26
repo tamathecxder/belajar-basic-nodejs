@@ -4,13 +4,17 @@
   "description": "Learn NodeJS\u001b[D\u001b[D\u001b[C\u001b[JS",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "dev": "ls -l",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "deezycxde",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.0",
     "validator": "^13.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
   }
 }

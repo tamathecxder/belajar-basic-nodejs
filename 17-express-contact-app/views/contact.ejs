@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-8">
+            <h2>Daftar Contact</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Lengkap</th>
+                        <th scope="col">No. Telp</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (contacts.length < 1) { %>
+                        <tr>
+                            <td colspan="4" align="center"><span>Data Contact belum ada</span></td>
+                        </tr>
+                    <% } %>
+
+                    <% contacts.forEach((contact, i) => { i++ %>
+                        <tr>
+                            <th scope="row"><%= i++ %> </th>
+                            <td><%= contact.nama %> </td>
+                            <td><%= contact.telp  %> </td>
+                            <td><a href="/contact/<%= contact.nama %> " class="btn btn-sm btn-dark"><i class="fa-solid fa-eye"></i> Detail</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
