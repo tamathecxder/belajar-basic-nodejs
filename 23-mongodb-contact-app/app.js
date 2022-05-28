@@ -2,15 +2,15 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 
 // connect ke database
-require('./utils/db')
+require("./utils/db");
 
 // models
 const Contact = require("./model/contact");
 
 // Flash message
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const flash = require('connect-flash');
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 
 const app = express();
 const port = 3000;
@@ -21,14 +21,14 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // Konfigurasi flash
-app.use(cookieParser('secret'));
+app.use(cookieParser("secret"));
 app.use(
-    session({
-        cookie: { maxAge: 6000 },
-        secret: 'secret',
-        resave: true,
-        saveUninitialized: true,
-    })
+  session({
+    cookie: { maxAge: 6000 },
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
 );
 app.use(flash());
 
@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
   app.get("/contact", async (req, res) => {
     // Menggunakan promise, tapi datanya belum tampil sempurna
     // Contact.find.then((contact) => {
-    //   res.send(contact) 
+    //   res.send(contact)
     // });
 
     const contacts = await Contact.find();
@@ -79,7 +79,17 @@ app.get("/", (req, res) => {
     });
   });
 
+  // Halaman detail contact
+  app.get("/contact/:nama", async (req, res) => {
+    const contact = await Contact.findOne({ nama: req.params.nama });
 
+    res.render("detail", {
+      layout: "layouts/main-layout",
+      error: "Contact dengan nama tersebut tidak tersedia!",
+      title: "Detail contact",
+      contact: contact,
+    });
+  });
 });
 
 app.listen(port, () => {
