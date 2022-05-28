@@ -1,6 +1,16 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
+
+// connect ke database
+require('./utils/db')
+
+// models
 const Contact = require("./model/contact");
+
+// Flash message
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
 const app = express();
 const port = 3000;
@@ -9,6 +19,18 @@ app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+
+// Konfigurasi flash
+app.use(cookieParser('secret'));
+app.use(
+    session({
+        cookie: { maxAge: 6000 },
+        secret: 'secret',
+        resave: true,
+        saveUninitialized: true,
+    })
+);
+app.use(flash());
 
 // Homepage
 app.get("/", (req, res) => {
@@ -41,8 +63,13 @@ app.get("/", (req, res) => {
     });
   });
 
-  app.get("/contact", (req, res) => {
-    const contacts = Contact();
+  app.get("/contact", async (req, res) => {
+    // Menggunakan promise, tapi datanya belum tampil sempurna
+    // Contact.find.then((contact) => {
+    //   res.send(contact) 
+    // });
+
+    const contacts = await Contact.find();
 
     res.render("contact", {
       layout: "layouts/main-layout",
@@ -51,6 +78,8 @@ app.get("/", (req, res) => {
       msg: req.flash("msg"),
     });
   });
+
+
 });
 
 app.listen(port, () => {
