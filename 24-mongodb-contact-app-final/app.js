@@ -150,7 +150,11 @@ app.post(
 // });
 
 app.delete('/contact', (req, res) => {
-
+  // delete berdasarkan id dari model Contact setelah itu redirect ke halaman /contact
+  Contact.deleteOne({ _id: req.body._id }, (error, result) => {
+    req.flash("msg", "Data contact tersebut berhasil dihapus");
+    res.redirect("/contact");
+  });
 })
 
 // Halaman detail contact
