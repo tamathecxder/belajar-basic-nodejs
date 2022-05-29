@@ -106,7 +106,7 @@ app.post(
       return true;
     }),
     check("email", "Alamat email tidak valid!").isEmail(),
-    check("telp", "Nomor telepon tidak valid!").isMobilePhone("id-ID"),
+    check("nohp", "Nomor telepon tidak valid!").isMobilePhone("id-ID"),
   ],
   (req, res) => {
     const errors = validationResult(req);
@@ -127,6 +127,21 @@ app.post(
     }
   }
 );
+
+// Proses delete contact
+app.get("/contact/delete/:nama", async (req, res) => {
+  const contact = await Contact.findOne({ nama: req.params.nama });
+
+  if (!contact) {
+    res.status(404);
+    res.send('<h1 align="center" style="margin: 8em auto;">404 Not Found</h1>');
+  } else {
+    Contact.deleteOne({ _id: contact._id }, (error, result) => {
+      req.flash("msg", "Data contact tersebut berhasil dihapus");
+      res.redirect("/contact");
+    });
+  }
+});
 
 // Halaman detail contact
 app.get("/contact/:nama", async (req, res) => {
