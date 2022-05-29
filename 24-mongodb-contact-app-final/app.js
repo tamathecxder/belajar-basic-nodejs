@@ -134,28 +134,23 @@ app.post(
   }
 );
 
-// Proses delete contact
-// app.get("/contact/delete/:nama", async (req, res) => {
-//   const contact = await Contact.findOne({ nama: req.params.nama });
-
-//   if (!contact) {
-//     res.status(404);
-//     res.send('<h1 align="center" style="margin: 8em auto;">404 Not Found</h1>');
-//   } else {
-//     Contact.deleteOne({ _id: contact._id }, (error, result) => {
-//       req.flash("msg", "Data contact tersebut berhasil dihapus");
-//       res.redirect("/contact");
-//     });
-//   }
-// });
-
-app.delete('/contact', (req, res) => {
+app.delete("/contact", (req, res) => {
   // delete berdasarkan id dari model Contact setelah itu redirect ke halaman /contact
   Contact.deleteOne({ _id: req.body._id }, (error, result) => {
     req.flash("msg", "Data contact tersebut berhasil dihapus");
     res.redirect("/contact");
   });
-})
+});
+
+// Halaman form ubah data contact
+app.get("/contact/edit/:nama", async (req, res) => {
+  const contact = await Contact.findOne({ nama: req.params.nama });
+  res.render("edit-contact", {
+    layout: "layouts/main-layout",
+    title: "Form ubah data contact",
+    contact: contact,
+  });
+});
 
 // Halaman detail contact
 app.get("/contact/:nama", async (req, res) => {
