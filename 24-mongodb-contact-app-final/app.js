@@ -4,6 +4,9 @@ const expressLayouts = require("express-ejs-layouts");
 // Validator
 const { body, validationResult, check } = require("express-validator");
 
+// HTTP Method Override
+const methodOverride = require("method-override");
+
 // connect ke database
 require("./utils/db");
 
@@ -17,6 +20,9 @@ const flash = require("connect-flash");
 
 const app = express();
 const port = 3000;
+
+// Setup method override
+app.use(methodOverride("_method"));
 
 app.set("view engine", "ejs");
 app.use(expressLayouts);
@@ -129,19 +135,23 @@ app.post(
 );
 
 // Proses delete contact
-app.get("/contact/delete/:nama", async (req, res) => {
-  const contact = await Contact.findOne({ nama: req.params.nama });
+// app.get("/contact/delete/:nama", async (req, res) => {
+//   const contact = await Contact.findOne({ nama: req.params.nama });
 
-  if (!contact) {
-    res.status(404);
-    res.send('<h1 align="center" style="margin: 8em auto;">404 Not Found</h1>');
-  } else {
-    Contact.deleteOne({ _id: contact._id }, (error, result) => {
-      req.flash("msg", "Data contact tersebut berhasil dihapus");
-      res.redirect("/contact");
-    });
-  }
-});
+//   if (!contact) {
+//     res.status(404);
+//     res.send('<h1 align="center" style="margin: 8em auto;">404 Not Found</h1>');
+//   } else {
+//     Contact.deleteOne({ _id: contact._id }, (error, result) => {
+//       req.flash("msg", "Data contact tersebut berhasil dihapus");
+//       res.redirect("/contact");
+//     });
+//   }
+// });
+
+app.delete('/contact', (req, res) => {
+
+})
 
 // Halaman detail contact
 app.get("/contact/:nama", async (req, res) => {
