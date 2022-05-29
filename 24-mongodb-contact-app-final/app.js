@@ -152,6 +152,52 @@ app.get("/contact/edit/:nama", async (req, res) => {
   });
 });
 
+// Proses ubah data contact
+app.put(
+  "/contact",
+  [
+    body("nama").custom(async (value, { req }) => {
+      console.log(req.body.nama.trim());
+      const duplicate = await Contact.findOne({ nama: value });
+      if (value !== req.body.oldNama && duplicate) {
+        throw new Error("Nama contact sudah tersedia!");
+      }
+
+      return true;
+    }),
+    check("email", "Alamat email tidak valid").isEmail(),
+    check("nohp", "Nomor telepon tidak valid").isMobilePhone("id-ID"),
+  ], 
+  (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.render("edit-contact", {
+        layout: "layouts/main-layout",
+        title: "Form ubah data contact",
+        errors: errors.array(),
+        contact: req.body,
+      });
+    } else {
+      Contact.updateOne(
+        { 
+          _id: req.body._id 
+        },
+        {
+          $set: {
+            nama: req.body.nama,
+            nohp: req.body.nohp,
+            email: req.body.email,
+          }
+        }
+      ).then((result) => {
+        req.flash("msg", "Data contact berhasil diubah");
+        res.redirect("/contact");
+      });
+    }
+  }
+);
+
 // Halaman detail contact
 app.get("/contact/:nama", async (req, res) => {
   const contact = await Contact.findOne({ nama: req.params.nama });
